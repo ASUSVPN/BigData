@@ -10,8 +10,7 @@
 ```
 
 ### Lista no ordenada
-```
+
 * primer elemento
 - segundo elemento
 + tercer elemento
-```
