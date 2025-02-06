@@ -14,3 +14,17 @@
 * primer elemento
 - segundo elemento
 + tercer elemento
+
+```
+>[!IMPORTANT]
+>
+>This is an IMPORTANT note.
+
+```
+[Adobe](https://www.adobe.com)
+```
+| Header | Another header | Yet another header |
+|--- |--- |--- |
+| row 1 | column 2 | column 3 |
+| row 2 | row 2 column 2 | row 2 column 3 |
+```
