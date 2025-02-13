@@ -2,6 +2,47 @@
 ## Katherynne Plessmann
 ## Salomon Cruz Vidal
 
+### 1. Implementa un programa en scala que calcule el radio de un circulo
+```
+var d = 10
+var radio = d / 2
+var resultado = "Teniendo "+d+" de diametro el radio es" + " " + radio 
+println(resultado)
+```
+Ejecución:
+```
+scala> var d = 10
+var d: Int = 10
+
+scala> var radio = d / 2
+var radio: Int = 5
+
+scala> var resultado = "Teniendo "+d+" de diametro el radio es" + " " + radio
+var resultado: String = Teniendo 10 de diametro el radio es 5
+```
+
+### 2. Implementa un programa en scala que me diga si un numero es primo
+Se consideran las reglas para que un numero sea primo, que sea mayor a 1 y se verifica que no sea divisible por los numeros en un rango desde 2 hasta el numero proporcionado -1.
+
+```
+var numero = 7
+
+if (numero > 1 && (2 until numero).forall(numero % _ != 0)) {
+    println(s"$numero Es primo.")
+} else {
+    println(s"$numero No es primo.")
+}
+```
+Ejecución:
+```
+scala> if (numero > 1 && (2 until numero).forall(numero % _ != 0)) {
+     |     println(s"$numero Es primo.")
+     | } else {
+     |     println(s"$numero No es primo.")
+     | }
+7 Es primo.
+```
+
 
 ### 3. Dada la variable bird = "tweet", utiliza interpolacion de strings para imprimir "Estoy escribiendo un tweet"
 
