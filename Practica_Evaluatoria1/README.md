@@ -2,7 +2,7 @@
 ## Katherynne Plessmann
 ## Salomon Cruz Vidal
 
-### Esta linea nos permite importar lo necesario para poder trabajar con datos en Spark
+#### Esta linea nos permite importar lo necesario para poder trabajar con datos en Spark
 ```
 import org.apache.spark.sql.SparkSession
 ```
@@ -11,7 +11,8 @@ Ejecución:
 scala> import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.SparkSession
 ```
-### 1. Se crea una sesion en Spark, necesaria para ejecutar operaciones de datos
+### 1. Comienza una simple sesión Spark.
+#### Se crea una sesion en Spark, necesaria para ejecutar operaciones de datos
 ```
 val spark = SparkSession.builder().getOrCreate()
 ```
@@ -19,7 +20,8 @@ Ejecución:
 ```
 val spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@246b2469
 ```
-### 2. Se carga un archivo csv, el cual se llama Netflix_2011_2016.csv
+### 2. Cargue el archivo Netflix Stock CSV en dataframe llamado df, haga que Spark infiera los tipos de datos.
+#### Se carga un archivo csv, el cual se llama Netflix_2011_2016.csv
 ```
 val df = spark.read.option("header","true").option("inferSchema","true").csv("Netflix_2011_2016.csv")
 ```
@@ -27,7 +29,8 @@ Ejecución:
 ```
 val df: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 5 more fields]
 ```
-### 3. Muestra los nombres de las columnas 
+### 3. ¿Cuáles son los nombres de las columnas?
+#### Muestra los nombres de las columnas 
 ```
 df.columns
 ```
@@ -35,7 +38,8 @@ Ejecución:
 ```
 val res0: Array[String] = Array(Date, Open, High, Low, Close, Volume, Adj Close)
 ```
-### 4. Muestra la estructura del dataframe (nombres y tipos de columnas)
+### 4. ¿Cómo es el esquema?
+### Muestra la estructura del dataframe (nombres y tipos de columnas)
 ```
 df.printSchema()
 ```
@@ -50,7 +54,8 @@ root
  |-- Volume: integer (nullable = true)
  |-- Adj Close: double (nullable = true)
 ```
-### 5. Obtiene las primero 5 filas en forma de array
+### 5. Imprime las primeras 5 renglones.
+#### Obtiene las primero 5 filas en forma de array
 ```
 df.head(5)
 ```
@@ -58,7 +63,7 @@ Ejecución:
 ```
 val res2: Array[org.apache.spark.sql.Row] = Array([2011-10-24,119.100002,120.28000300000001,115.100004,118.839996,120460200,16.977142], [2011-10-25,74.899999,79.390001,74.249997,77.370002,315541800,11.052857000000001], [2011-10-26,78.73,81.420001,75.399997,79.400002,148733900,11.342857], [2011-10-27,82.179998,82.71999699999999,79.249998,80.86000200000001,71190000,11.551428999999999], [2011-10-28,80.280002,84.660002,79.599999,84.14000300000001,57769600,12.02])
 ```
-### Esta es otra forma ordenada para imprimir las primeras 5 lineas 
+#### Esta es otra forma ordenada para imprimir las primeras 5 lineas 
 ```
 df.show(5)
 ```
@@ -75,7 +80,8 @@ Ejecución:
 +----------+----------+------------------+----------+-----------------+---------+------------------+
 only showing top 5 rows
 ```
-### 6. Nos refleja una estadistica de cada columna
+### 6. Usa el método describe () para aprender sobre el DataFrame.
+#### Nos refleja una estadistica de cada columna
 ```
 df.describe().show()
 ```
@@ -91,7 +97,8 @@ Ejecución:
 |    max|        708.900017|        716.159996|        697.569984|        707.610001|           315541800|        130.929993|
 +-------+------------------+------------------+------------------+------------------+--------------------+------------------+
 ```
-### 7. Agrega una nueva columna que se llama "HV Ratio" la cual se calcula dividiendo "High" entre "Volume"
+### 7. Crea un nuevo dataframe con una columna nueva llamada “HV Ratio” que es la relación que existe entre el precio de la columna “High” frente a la columna “Volumen” de acciones negociadas por un día. Hint - es una operación
+#### Agrega una nueva columna que se llama "HV Ratio" la cual se calcula dividiendo "High" entre "Volume"
 ```
 val df2 = df.withColumn("HV Ratio",df("High")/df("Volume"))
 ```
@@ -99,7 +106,8 @@ Ejecución:
 ```
 val df2: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 6 more fields]
 ```
-### 8. Se selecciona date y open para ver el dia con el valor de open mas alto, luego se debe de llamar de forma descendente y mostrar el primer valor
+### 8. ¿Qué día tuvo el pico más alto en la columna “Open”?
+#### Se selecciona date y open para ver el dia con el valor de open mas alto, luego se debe de llamar de forma descendente y mostrar el primer valor
 ```
 df.select($"Date", $"Open").orderBy($"Open".desc).show(1)
 
@@ -113,11 +121,12 @@ Ejecución:
 +----------+----------+
 only showing top 1 row
 ```
-### 9. Significado de la columna Cerrar "Close" (en el contexto de informacion financiera)
+### 9. ¿Cual es el significado de la columna Cerrar "Close" en el contexto de informacion financiera, expliquelo no hay que codificar nada?
 ```
 Entendemos, que es el ultimo precio en el que se encuentra un producto o un activo financiero antes de cerrar su operacion diaria. Pasa mucho en las bolsas de valores, que el mercado cierra en la tarde y si revisas en un horario donde ya este cerrado solo podras ver el valor de close, hasta que se vuelva a abrir al dia siguiente y se empiece a mover el precio.
 ```
-### 10. Se obtiene el valor minimo y maximo de la columna volume
+### 10. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
+### Se obtiene el valor minimo y maximo de la columna volume
 ```
 df.select(max("Volume")).show()
 df.select(min("Volume")).show()
@@ -136,7 +145,8 @@ Ejecución:
 |    3531300|
 +-----------+
 ```
-### 11. a) Seleccionamos el dataframe que declaramos que contiene los datos y le aplicamos el filtro sobre la columna de Close donde seleccionamos las celdas que sean menores a 600 y con la función count las contamos
+### 11. a ¿Cuántos días fue la columna “Close” inferior a $ 600?
+#### Seleccionamos el dataframe que declaramos que contiene los datos y le aplicamos el filtro sobre la columna de Close donde seleccionamos las celdas que sean menores a 600 y con la función count las contamos
 ```
 df.filter($"Close"<600).count()
 ```
@@ -145,7 +155,8 @@ Ejecucion:
 scala> df.filter($"Close"<600).count()
 val res13: Long = 1218
 ```
-### 11. b) Seleccionamos el dataframe declarado y contamos las celdas de la columna High que fueron superiores a 500 y para obtener el porcentaje de tiempo que fue mayor a 500 aplicamos una regla de 3 basandonos en el total de filas, nos da un resultado redondeado de 4.92 % de tiempo donde el valor High del dia fue mayor a 500 
+### 11. b) ¿Qué porcentaje del tiempo fue la columna “High” mayor que $ 500?
+#### Seleccionamos el dataframe declarado y contamos las celdas de la columna High que fueron superiores a 500 y para obtener el porcentaje de tiempo que fue mayor a 500 aplicamos una regla de 3 basandonos en el total de filas, nos da un resultado redondeado de 4.92 % de tiempo donde el valor High del dia fue mayor a 500 
 ```
 (df.filter($"High">500).count()*1.0/df.count())*100
 ```
@@ -154,7 +165,8 @@ Ejecucion:
 scala> (df.filter($"High">500).count()*1.0/df.count())*100
 val res12: Double = 4.924543288324067
 ```
-### 11. c) para saber la correlaccion de pearson entre la columna High y la Columna Volumen es necesario aplicar la funcion corr(), el resultado que nos da es -0.2096, lo cual interpretando significa que hay una correlacion negativa debil, es decir que cuando High Aumenta Volume Baja pero no en gran medida
+### 11. c) ¿Cuál es la correlación de Pearson entre columna “High” y la columna “Volumen”?
+#### Para saber la correlaccion de pearson entre la columna High y la Columna Volumen es necesario aplicar la funcion corr(), el resultado que nos da es -0.2096, lo cual interpretando significa que hay una correlacion negativa debil, es decir que cuando High Aumenta Volume Baja pero no en gran medida
 ```
 df.select(corr("High","Volume")).show()
 ```
@@ -167,7 +179,8 @@ scala> df.select(corr("High","Volume")).show()
 |-0.20960233287942157|
 +--------------------+
 ```
-### 11. d) Para saber cuales son los valores maximos de la columna High por año agregamos una columna para separar el year de la columna Date, de la cual hacemos un nuevo dataframe que llamamos yeardf, despues seleccionamos las columnas Year y High y las agrupamos por año y con la funcion max sacamos los valores mas altos de año, despues de cada año seleccionamos el valor maximo de High y lo mostramos.
+### 11. d) ¿Cuál es el máximo de la columna “High” por año?
+#### Para saber cuales son los valores maximos de la columna High por año agregamos una columna para separar el year de la columna Date, de la cual hacemos un nuevo dataframe que llamamos yeardf, despues seleccionamos las columnas Year y High y las agrupamos por año y con la funcion max sacamos los valores mas altos de año, despues de cada año seleccionamos el valor maximo de High y lo mostramos.
 ```
 val yeardf = df.withColumn("Year",year(df("Date")))
 val yearmaxs = yeardf.select($"Year",$"High").groupBy("Year").max()
@@ -193,7 +206,8 @@ scala> yearmaxs.select($"Year",$"max(High)").show()
 |2011|120.28000300000001|
 +----+------------------+
 ```
-### 11. e) Para saber cuales son los valores promedios de la columna Close por mes agregamos una columna para separar el month de la columna Date, de la cual hacemos un nuevo dataframe que llamamos monthdf, despues seleccionamos las columnas Month y Close y las agrupamos por mes y con la funcion mean sacamos el promedio de esos grupos y lo declaramos como un dataframe llamado monthavgs, finalmente de cada mes mostramos el promedio.
+### 11. e) ¿Cuál es el promedio de la columna “Close” para cada mes del calendario?
+#### Para saber cuales son los valores promedios de la columna Close por mes agregamos una columna para separar el month de la columna Date, de la cual hacemos un nuevo dataframe que llamamos monthdf, despues seleccionamos las columnas Month y Close y las agrupamos por mes y con la funcion mean sacamos el promedio de esos grupos y lo declaramos como un dataframe llamado monthavgs, finalmente de cada mes mostramos el promedio.
 ```
 val monthdf = df.withColumn("Month",month(df("Date")))
 val monthavgs = monthdf.select($"Month",$"Close").groupBy("Month").mean()
