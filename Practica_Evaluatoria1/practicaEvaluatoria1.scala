@@ -38,6 +38,25 @@ df.select($"Date", $"Open").orderBy($"Open".desc).show(1)
 df.select(max("Volume")).show()
 df.select(min("Volume")).show()
 
+// 11. a ¿Cuántos días fue la columna “Close” inferior a $ 600?
+df.filter($"Close"<600).count()
+
+// 11. b) ¿Qué porcentaje del tiempo fue la columna “High” mayor que $ 500?
+(df.filter($"High">500).count()*1.0/df.count())*100
+
+// 11. c) ¿Cuál es la correlación de Pearson entre columna “High” y la columna “Volumen”?
+df.select(corr("High","Volume")).show()
+
+// 11 d) ¿Cuál es el máximo de la columna “High” por año?
+val yeardf = df.withColumn("Year",year(df("Date")))
+val yearmaxs = yeardf.select($"Year",$"High").groupBy("Year").max()
+yearmaxs.select($"Year",$"max(High)").show()
+
+// 11 e) ¿Cuál es el promedio de la columna “Close” para cada mes del calendario?
+val monthdf = df.withColumn("Month",month(df("Date")))
+val monthavgs = monthdf.select($"Month",$"Close").groupBy("Month").mean()
+monthavgs.select($"Month",$"avg(Close)").show()
+
 //EXTRAS
 df.select($"Date", $"Volume").orderBy($"Volume".desc).show(1)
 
@@ -45,3 +64,7 @@ df.filter(col("Close").between(300, 600)).count()
 
 val df3 = df.withColumn("Volatility", df("High") - df("Low"))
 df3.select($"Date", $"Volatility").orderBy($"Volatility".desc).show(1)
+
+val avgClose = df.select(avg("Close")).first().getDouble(0)
+
+val avgOpen = df.select(avg("Open")).first().getDouble(0)

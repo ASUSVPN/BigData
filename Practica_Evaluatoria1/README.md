@@ -136,6 +136,95 @@ Ejecución:
 |    3531300|
 +-----------+
 ```
+### 11. a) Seleccionamos el dataframe que declaramos que contiene los datos y le aplicamos el filtro sobre la columna de Close donde seleccionamos las celdas que sean menores a 600 y con la función count las contamos
+```
+df.filter($"Close"<600).count()
+```
+Ejecucion:
+```
+scala> df.filter($"Close"<600).count()
+val res13: Long = 1218
+```
+### 11. b) Seleccionamos el dataframe declarado y contamos las celdas de la columna High que fueron superiores a 500 y para obtener el porcentaje de tiempo que fue mayor a 500 aplicamos una regla de 3 basandonos en el total de filas, nos da un resultado redondeado de 4.92 % de tiempo donde el valor High del dia fue mayor a 500 
+```
+(df.filter($"High">500).count()*1.0/df.count())*100
+```
+Ejecucion:
+```
+scala> (df.filter($"High">500).count()*1.0/df.count())*100
+val res12: Double = 4.924543288324067
+```
+### 11. c) para saber la correlaccion de pearson entre la columna High y la Columna Volumen es necesario aplicar la funcion corr(), el resultado que nos da es -0.2096, lo cual interpretando significa que hay una correlacion negativa debil, es decir que cuando High Aumenta Volume Baja pero no en gran medida
+```
+df.select(corr("High","Volume")).show()
+```
+Ejecucion:
+```
+scala> df.select(corr("High","Volume")).show()
++--------------------+
+|  corr(High, Volume)|
++--------------------+
+|-0.20960233287942157|
++--------------------+
+```
+### 11. d) Para saber cuales son los valores maximos de la columna High por año agregamos una columna para separar el year de la columna Date, de la cual hacemos un nuevo dataframe que llamamos yeardf, despues seleccionamos las columnas Year y High y las agrupamos por año y con la funcion max sacamos los valores mas altos de año, despues de cada año seleccionamos el valor maximo de High y lo mostramos.
+```
+val yeardf = df.withColumn("Year",year(df("Date")))
+val yearmaxs = yeardf.select($"Year",$"High").groupBy("Year").max()
+yearmaxs.select($"Year",$"max(High)").show()
+```
+Ejecucion:
+```
+scala> val yeardf = df.withColumn("Year",year(df("Date")))
+val yeardf: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 6 more fields]
+
+scala> val yearmaxs = yeardf.select($"Year",$"High").groupBy("Year").max()
+val yearmaxs: org.apache.spark.sql.DataFrame = [Year: int, max(Year): int ... 1 more field]
+
+scala> yearmaxs.select($"Year",$"max(High)").show()
++----+------------------+
+|Year|         max(High)|
++----+------------------+
+|2015|        716.159996|
+|2013|        389.159988|
+|2014|        489.290024|
+|2012|        133.429996|
+|2016|129.28999299999998|
+|2011|120.28000300000001|
++----+------------------+
+```
+### 11. e) Para saber cuales son los valores promedios de la columna Close por mes agregamos una columna para separar el month de la columna Date, de la cual hacemos un nuevo dataframe que llamamos monthdf, despues seleccionamos las columnas Month y Close y las agrupamos por mes y con la funcion mean sacamos el promedio de esos grupos y lo declaramos como un dataframe llamado monthavgs, finalmente de cada mes mostramos el promedio.
+```
+val monthdf = df.withColumn("Month",month(df("Date")))
+val monthavgs = monthdf.select($"Month",$"Close").groupBy("Month").mean()
+monthavgs.select($"Month",$"avg(Close)").show()
+```
+Ejecucion:
+```
+scala> val monthdf = df.withColumn("Month",month(df("Date")))
+val monthdf: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 6 more fields]
+
+scala> val monthavgs = monthdf.select($"Month",$"Close").groupBy("Month").mean()
+val monthavgs: org.apache.spark.sql.DataFrame = [Month: int, avg(Month): double ... 1 more field]
+
+scala> monthavgs.select($"Month",$"avg(Close)").show()
++-----+------------------+
+|Month|        avg(Close)|
++-----+------------------+
+|   12| 199.3700942358491|
+|    1|212.22613874257422|
+|    6| 295.1597153490566|
+|    3| 249.5825228971963|
+|    5|264.37037614150944|
+|    9|206.09598121568627|
+|    4|246.97514271428562|
+|    8|195.25599892727263|
+|    7|243.64747528037387|
+|   10|205.93297300900903|
+|   11| 194.3172275445545|
+|    2| 254.1954634020619|
++-----+------------------+
+```
 
 ### EXTRA
 #### Se puede encontrar la fecha con el mayor volumen de transacciones, agregando date y con el descendente de Volume (es una mezcla entre el ejercicio 8 y 10)
@@ -151,7 +240,7 @@ Ejecución:
 +----------+---------+
 only showing top 1 row
 ```
-# Este permite ver cuantos dias el Close estuvo entre 300 y 600, el count va a permitir hacer ese conteo
+#### Este permite ver cuantos dias el Close estuvo entre 300 y 600, el count va a permitir hacer ese conteo
 ```
 df.filter(col("Close").between(300, 600)).count()
 ```
@@ -159,7 +248,7 @@ Ejecución:
 ```
 val res7: Long = 421
 ```
-# Calcula la diferencia entre "High" y "Low" (se restan) y luego encuentra el día con la mayor volatilidad
+#### Calcula la diferencia entre "High" y "Low" (se restan) y luego encuentra el día con la mayor volatilidad
 ```
 val df3 = df.withColumn("Volatility", df("High") - df("Low"))
 df3.select($"Date", $"Volatility").orderBy($"Volatility".desc).show(1)
@@ -176,4 +265,18 @@ scala> df3.select($"Date", $"Volatility").orderBy($"Volatility".desc).show(1)
 |2013-10-22|67.65999899999997|
 +----------+-----------------+
 only showing top 1 row
+```
+
+#### Precio promedio de Close y Open de todos los registros, seleccionamos todas las columnas de Close y aplicamos la funcion funcion avg para obtener promedio, lo mismo hacemos para Open, y vemos que como se espera es como un promedio general del valor general de las acciones a lo largo del tiempo y que en promedio siempre se abre un poco mas bajo de valor de lo que Close ya que logicamente se intentar ofertar para vender.
+```
+val avgClose = df.select(avg("Close")).first().getDouble(0)
+val avgOpen = df.select(avg("Open")).first().getDouble(0)
+```
+Ejecucion:
+```
+scala> val avgClose = df.select(avg("Close")).first().getDouble(0)
+val avgClose: Double = 230.522453845909
+
+scala> val avgOpen = df.select(avg("Open")).first().getDouble(0)
+val avgOpen: Double = 230.39351086656092
 ```
