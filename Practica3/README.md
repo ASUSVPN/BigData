@@ -2,7 +2,7 @@
 ## Katherynne Plessmann
 ## Salomon Cruz Vidal
 
-### 1. Implementa un programa en scala que calcule el radio de un circulo
+### 1. Clasifica cada número como par o impar
 ```
 def listEvens(list:List[Int]): String ={ 
     for(n <- list){ // Itera sobre cada elemento 'n' de la lista
