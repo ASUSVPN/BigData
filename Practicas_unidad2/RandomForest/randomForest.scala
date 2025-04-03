@@ -21,14 +21,21 @@
 // scalastyle:off println
 package org.apache.spark.examples.ml
 
-// $example on$
-import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.classification.{RandomForestClassificationModel, RandomForestClassifier}
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+// Import
+import org.apache.spark.ml.Pipeline //Encadena pasos como transformaciones y modelos en un solo flujo de trabajo.
+import org.apache.spark.ml.classification.{RandomForestClassificationModel, RandomForestClassifier} //Crea, entrena y analiza modelos de clasificación con Random Forest.
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator //Evalua el modelo usando métricas como precisión (accuracy) y F1-score.
 import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
-// $example off$
+/*
+StringIndexer: Convierte etiquetas de texto a números.
+VectorIndexer: Detecta y codifica variables categóricas en vectores.
+IndexToString: Convierte predicciones numéricas a etiquetas originales.
+*/
+
+// Iniciar la sesión de Spark
 import org.apache.spark.sql.SparkSession
 
+// En el spark-shell, no necesitamos usar el objeto ni el main(),  ejecutar línea por línea fuera del objeto.
 object RandomForestClassifierExample {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
@@ -36,25 +43,26 @@ object RandomForestClassifierExample {
       .appName("RandomForestClassifierExample")
       .getOrCreate()
 
-    // $example on$
-    // Load and parse the data file, converting it to a DataFrame.
+    // Carga los datos de entrenamiento en formato LIBSVM como un DataFrame, listos para ser procesados por Spark MLlib.
+    //MLlib ->  librería de aprendizaje automático de Apache Spark
     val data = spark.read.format("libsvm").load("C:/Users/kathe/Documents/BigData/Practicas_unidad2/RandomForest/sample_libsvm_data.txt")
 
-    // Index labels, adding metadata to the label column.
-    // Fit on whole dataset to include all labels in index.
+    // Convierte las etiquetas (clases) de texto o numéricas en índices numéricos consecutivos para que 
+    //puedan ser entendidas por los algoritmos de machine learning (categorías).
     val labelIndexer = new StringIndexer()
       .setInputCol("label")
       .setOutputCol("indexedLabel")
       .fit(data)
-    // Automatically identify categorical features, and index them.
-    // Set maxCategories so features with > 4 distinct values are treated as continuous.
+
+    // Permite identificar automáticamente qué columnas dentro del vector de entrada son categóricas y convertirlas en números que el modelo pueda entender.
     val featureIndexer = new VectorIndexer()
       .setInputCol("features")
       .setOutputCol("indexedFeatures")
       .setMaxCategories(4)
+      .setHandleInvalid("skip")
       .fit(data)
 
-    // Split the data into training and test sets (30% held out for testing).
+    // Divide los datos en dos conjuntos: 70% entrenamiento y 30% de prueba.
     val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
 
     // Train a RandomForest model.
@@ -67,11 +75,11 @@ object RandomForestClassifierExample {
     val labelConverter = new IndexToString()
       .setInputCol("prediction")
       .setOutputCol("predictedLabel")
-      .setLabels(labelIndexer.labelsArray(0))
+      .setLabels(res2.labelsArray(0))
 
     // Chain indexers and forest in a Pipeline.
     val pipeline = new Pipeline()
-      .setStages(Array(labelIndexer, featureIndexer, rf, labelConverter))
+      .setStages(Array(res2, featureIndexer, rf, labelConverter))
 
     // Train model. This also runs the indexers.
     val model = pipeline.fit(trainingData)
