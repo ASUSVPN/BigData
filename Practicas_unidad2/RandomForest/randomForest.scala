@@ -65,32 +65,32 @@ object RandomForestClassifierExample {
     // Divide los datos en dos conjuntos: 70% entrenamiento y 30% de prueba.
     val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
 
-    // Train a RandomForest model.
+    // Entrena el modelo Random Forest
     val rf = new RandomForestClassifier()
       .setLabelCol("indexedLabel")
       .setFeaturesCol("indexedFeatures")
-      .setNumTrees(10)
+      .setNumTrees(10) // Número de árboles del bosque
 
-    // Convert indexed labels back to original labels.
+    // Convierte los resultados de las predicciones de nuevo a etiquetas originales (no indexadas)
     val labelConverter = new IndexToString()
       .setInputCol("prediction")
       .setOutputCol("predictedLabel")
       .setLabels(res2.labelsArray(0))
 
-    // Chain indexers and forest in a Pipeline.
+    // Encadena los pasos anteriores en un Pipeline
     val pipeline = new Pipeline()
       .setStages(Array(res2, featureIndexer, rf, labelConverter))
 
-    // Train model. This also runs the indexers.
+    // Entrena el modelo.
     val model = pipeline.fit(trainingData)
 
-    // Make predictions.
+    // Hace predicciones con el conjunto de prueba.
     val predictions = model.transform(testData)
 
-    // Select example rows to display.
+    // Muestra ejemplos de predicciones
     predictions.select("predictedLabel", "label", "features").show(5)
 
-    // Select (prediction, true label) and compute test error.
+    //Evaluacion
     val evaluator = new MulticlassClassificationEvaluator()
       .setLabelCol("indexedLabel")
       .setPredictionCol("prediction")
