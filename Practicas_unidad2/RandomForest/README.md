@@ -2,7 +2,7 @@
 ## Katherynne Plessmann
 ## Salomon Cruz Vidal
 
-### 1. Esta línea se usa para construir, entrenar, transformar y evaluar un modelo de clasificación en Spark.
+### 1. Estas líneas se usan para importar las librerias necesarias para construir, entrenar, transformar y evaluar un modelo de clasificación  Random Forest en Spark.
 ```
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.classification.{RandomForestClassificationModel, RandomForestClassifier}
@@ -105,7 +105,7 @@ scala> val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
 val trainingData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 val testData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 ```
-### 7. Estas lineas se usan para crear un clasificador basado en el algoritmo de Random Forest, definir la columna que contiene los valores a predicir, la columna que tiene las caracteristicas y definir el número de arboles a utilziar
+### 7. Estas lineas se usan para crear un clasificador basado en el algoritmo de Random Forest, definir la columna que contiene los valores a predicir, la columna que tiene las caracteristicas y definir el número de arboles a utilizar
 ```
 val rf = new RandomForestClassifier()
 .setLabelCol("indexedLabel")
