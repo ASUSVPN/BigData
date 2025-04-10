@@ -105,9 +105,12 @@ scala> val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
 val trainingData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 val testData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 ```
-### 7. Esta línea se usa para 
+### 7. Estas lineas se usan para crear un clasificador basado en el algoritmo de Random Forest, definir la columna que contiene los valores a predicir, la columna que tiene las caracteristicas y definir el número de arboles a utilziar
 ```
- LINEA
+val rf = new RandomForestClassifier()
+.setLabelCol("indexedLabel")
+.setFeaturesCol("indexedFeatures")
+.setNumTrees(10)
 ```
 Ejecución:
 ```
@@ -125,9 +128,12 @@ val res10: res9.type = rfc_a3d068ca1578
 
 ```
 
-### 8. Esta línea se usa para 
+### 8. Las siguientes línes se usan para tomar la columna de prediction del modelo para crear una columna con las etiquetas originales y convertirlas en un array con los valores legibles
 ```
- LINEA
+ val labelConverter = new IndexToString()
+.setInputCol("prediction")
+.setOutputCol("predictedLabel")
+.setLabels(res2.labelsArray(0))
 ```
 Ejecución:
 ```
@@ -144,9 +150,10 @@ scala>       .setLabels(res2.labelsArray(0))
 val res13: res12.type = idxToStr_1f265b604ce8
 
 ```
-### 9. Esta línea se usa para 
+### 9. Esta línea se usa para crear una pipeline para poder llevar las etapas de procesamiento y modelo del clasificador
 ```
- LINEA
+val pipeline = new Pipeline()
+.setStages(Array(res2, featureIndexer, rf, labelConverter))
 ```
 Ejecución:
 ```
@@ -157,9 +164,9 @@ val pipeline: org.apache.spark.ml.Pipeline = pipeline_82cdf2d9c7d4
 scala>       .setStages(Array(res2, featureIndexer, rf, labelConverter))
 val res14: pipeline.type = pipeline_82cdf2d9c7d4
 ```
-### 10. Esta línea se usa para 
+### 10. Esta línea se usa para entrenar el modelo 
 ```
- LINEA
+val model = pipeline.fit(trainingData)
 ```
 Ejecución:
 ```
@@ -167,18 +174,20 @@ Ejecución:
 scala>  val model = pipeline.fit(trainingData)
 val model: org.apache.spark.ml.PipelineModel = pipeline_82cdf2d9c7d4
 ```
-### 11. Esta línea se usa para 
+### 11. Esta línea se usa para generar predicciones con el modelo entrenado
 ```
- LINEA
+val predictions = model.transform(testData)
+
 ```
 Ejecución:
 ```
 scala> val predictions = model.transform(testData)
 val predictions: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 6 more fields]
 ```
-### 12. Esta línea se usa para 
+### 12. Esta línea se usa para mostrar las predicciones del modelo junto con los datos reales (Caracteristicas) 
 ```
- LINEA
+val predictions = model.transform(testData)
+predictions.select("predictedLabel", "label", "features").show(5)
 ```
 Ejecución:
 ```
@@ -197,9 +206,14 @@ scala> predictions.select("predictedLabel", "label", "features").show(5)
 +--------------+-----+--------------------+
 only showing top 5 rows
 ```
-### 13. Esta línea se usa para 
+### 13. Estas líneas se usan para evaluar al modelo de clasificacion, basado en sus metricas de precisión
 ```
- LINEA
+val evaluator = new MulticlassClassificationEvaluator()
+.setLabelCol("indexedLabel")
+.setPredictionCol("prediction")
+.setMetricName("accuracy")
+val accuracy = evaluator.evaluate(predictions)
+println(s"Test Error = ${(1.0 - accuracy)}")
 ```
 Ejecución:
 ```
@@ -222,9 +236,10 @@ val accuracy: Double = 1.0
 scala>     println(s"Test Error = ${(1.0 - accuracy)}")
 Test Error = 0.0
 ```
-### 14. Esta línea se usa para 
+### 14. Estas líneas se utilizan para mostrar los arboles del modelo entrenado 
 ```
- LINEA
+val rfModel = model.stages(2).asInstanceOf[RandomForestClassificationModel]
+println(s"Learned classification forest model:\n ${rfModel.toDebugString}")
 ```
 Ejecución:
 ```
