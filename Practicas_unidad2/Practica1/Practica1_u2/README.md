@@ -205,7 +205,7 @@ scala> val lrModel = lr.fit(output)
 val lrModel: org.apache.spark.ml.regression.LinearRegressionModel = LinearRegressionModel: uid=linReg_99cac6eedf6e, numFeatures=4
 ```
 
-### 14. Con las siguientes lineas imprimimos los coeficientes de multiplicación y el intercepto del modelo (valor objetivo cuando las características son 0)
+### 15. Con las siguientes lineas imprimimos los coeficientes de multiplicación y el intercepto del modelo (valor objetivo cuando las características son 0)
 ```
 println(s"Coeficientes: ${lrModel.coefficients}")
 println(s"Intercepto: ${lrModel.intercept}")
@@ -219,7 +219,7 @@ scala> println(s"Intercepto: ${lrModel.intercept}")
 Intercepto: -1051.5942552990748
 ```
 
-### 15. En la siguiente linea de código creamos un objeto con el resumen de metricas del modelo de Regresión lineal
+### 16. En la siguiente linea de código creamos un objeto con el resumen de metricas del modelo de Regresión lineal
 ```
 val trainingSummary = lrModel.summary
 ```
@@ -229,7 +229,7 @@ scala> val trainingSummary = lrModel.summary
 val trainingSummary: org.apache.spark.ml.regression.LinearRegressionTrainingSummary = org.apache.spark.ml.regression.LinearRegressionTrainingSummary@1cc7ed26
 ```
 
-### 15. En la siguiente conjunto de líneas se imprimen de modelo los siguientes valores: Residuales, el RMSE, el MSE, y tambien el R^2. 
+### 17. En la siguiente conjunto de líneas se imprimen de modelo los siguientes valores: Residuales, el RMSE, el MSE, y tambien el R^2. 
 ```
 trainingSummary.residuals.show()
 
