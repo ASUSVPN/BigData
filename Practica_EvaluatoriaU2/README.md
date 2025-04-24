@@ -103,11 +103,21 @@ scala> data.describe().show()
 ```
 ### 6. Haga la transformación pertinente para los datos categóricos los cuales serán nuestras etiquetas a clasificar.
 ```
-000
+val indexer = new StringIndexer()
+  .setInputCol("species")   
+  .setOutputCol("label")    
+  .fit(data)
 ```
 Ejecución:
 ```
+scala>   .setInputCol("species")
+val res9: indexer.type = strIdx_a6a173466f12
 
+scala>   .setOutputCol("label")
+val res10: res9.type = strIdx_a6a173466f12
+
+scala>   .fit(data)
+val res11: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_a6a173466f12, handleInvalid=error
 ```
 ### 7. Construya el modelo de clasificación y explique su arquitectura.
 ```

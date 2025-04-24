@@ -7,6 +7,8 @@
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+
 
 // Iniciar la sesion
 val spark = SparkSession.builder.appName("MultilayerPerceptronClassifierEvaluation").getOrCreate()
@@ -27,7 +29,10 @@ data.show(5)
 data.describe().show()
 
 // 6. Haga la transformación pertinente para los datos categóricos los cuales serán nuestras etiquetas a clasificar.
-
+val indexer = new StringIndexer()
+  .setInputCol("species")   
+  .setOutputCol("label")    
+  .fit(data)
 
 // 7. Construya el modelo de clasificación y explique su arquitectura.
 
