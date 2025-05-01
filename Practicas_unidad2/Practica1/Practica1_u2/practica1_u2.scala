@@ -35,8 +35,8 @@ val firstrow = data.head(1)(0)
 println("\n")
 println("Example data row")
 for(ind <- Range(1, colnames.length)){
-    println(colnames(ind))
-    println(firstrow(ind))
+    println(colnames(ind-1))
+    println(firstrow(ind-1))
     println("\n")
 }
 
@@ -47,7 +47,6 @@ import org.apache.spark.ml.linalg.Vectors
 // Renombre la columna Yearly Amount Spent como "label"
 // Tambien de los datos tome solo la columa numerica 
 // Deje todo esto como un nuevo DataFrame que se llame df
-data.columns
 val df = data.select(data("Yearly Amount Spent").as("label"), $"Avg Session Length", $"Time on App", $"Time on Website", $"Length of Membership")
 
 // Configure las columnas de entrada de donde se supone que leemos los valores.
