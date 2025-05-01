@@ -132,8 +132,6 @@ scala> val indexedData = indexerModel.transform(data)
 val indexedData: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 4 more fields]
 ```
 ### 7. Construya el modelo de clasificación y explique su arquitectura.
-```
-```
 #### Crea la columna features combinando columnas numéricas
 ```
 
