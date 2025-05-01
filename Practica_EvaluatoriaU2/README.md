@@ -14,6 +14,7 @@
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, VectorAssembler}
 
 // Iniciar la sesion
 val spark = SparkSession.builder.appName("MultilayerPerceptronClassifierEvaluation").getOrCreate()
@@ -32,6 +33,10 @@ import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 
 scala> import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.SparkSession
+
+scala> import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, VectorAssembler}
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, VectorAssembler}
+
 
 scala> val spark = SparkSession.builder.appName("MultilayerPerceptronClassifierEvaluation").getOrCreate()
 warning: 1 deprecation (since 2.13.3); for details, enable `:setting -deprecation` or `:replay -deprecation`
@@ -104,34 +109,137 @@ scala> data.describe().show()
 ### 6. Haga la transformación pertinente para los datos categóricos los cuales serán nuestras etiquetas a clasificar.
 ```
 val indexer = new StringIndexer()
-  .setInputCol("species")   
-  .setOutputCol("label")    
-  .fit(data)
+  .setInputCol("species")
+  .setOutputCol("label")
+val indexerModel = indexer.fit(data)
+val indexedData = indexerModel.transform(data)
 ```
 Ejecución:
 ```
+scala> val indexer = new StringIndexer()
+val indexer: org.apache.spark.ml.feature.StringIndexer = strIdx_f955b90603b0
+
 scala>   .setInputCol("species")
-val res9: indexer.type = strIdx_a6a173466f12
+val res4: indexer.type = strIdx_f955b90603b0
 
 scala>   .setOutputCol("label")
-val res10: res9.type = strIdx_a6a173466f12
+val res5: res4.type = strIdx_f955b90603b0
 
-scala>   .fit(data)
-val res11: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_a6a173466f12, handleInvalid=error
+scala> val indexerModel = indexer.fit(data)
+val indexerModel: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_f955b90603b0, handleInvalid=error
+
+scala> val indexedData = indexerModel.transform(data)
+val indexedData: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 4 more fields]
 ```
 ### 7. Construya el modelo de clasificación y explique su arquitectura.
 ```
-000
+```
+#### Crea la columna features combinando columnas numéricas
+```
+
+val assembler = new VectorAssembler()
+  .setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width"))
+  .setOutputCol("features")
+
+val finalData = assembler.transform(indexedData)
 ```
 Ejecución:
 ```
+scala> val assembler = new VectorAssembler()
+val assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_c979d92b47b4, handleInvalid=error
 
+scala>   .setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width"))
+val res6: assembler.type = VectorAssembler: uid=vecAssembler_c979d92b47b4, handleInvalid=error, numInputCols=4
+
+scala>   .setOutputCol("features")
+val res7: res6.type = VectorAssembler: uid=vecAssembler_c979d92b47b4, handleInvalid=error, numInputCols=4
+
+scala> val finalData = assembler.transform(indexedData)
+val finalData: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 5 more fields]
 ```
-### 8. Imprima los resultados del modelo y de sus observaciones.
+#### Divide los datos en entrenamiento (70%) y prueba (30%)
 ```
-000
+val Array(train, test) = finalData.randomSplit(Array(0.7, 0.3), seed = 1234L)
 ```
 Ejecución:
 ```
+scala> val Array(train, test) = finalData.randomSplit(Array(0.7, 0.3), seed = 1234L)
+val train: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [sepal_length: double, sepal_width: double ... 5 more fields]
+val test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [sepal_length: double, sepal_width: double ... 5 more fields]
+```
+#### Definie la arquitectura de la red neuronal: 4 entradas porque el conjunto iris tiene 4 características por flor, 5 y 4 neuronas como una configuración común y balanceada, por último 3 clases que queremos predecir.
+```
+val layers = Array[Int](4, 5, 4, 3)
+```
+Ejecución:
+```
+scala> val layers = Array[Int](4, 5, 4, 3)
+val layers: Array[Int] = Array(4, 5, 4, 3)
+```
+#### Configura el modelo
+```
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
+```
+Ejecución:
+```
+scala> val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
+val trainer: org.apache.spark.ml.classification.MultilayerPerceptronClassifier = mlpc_22e2df4ef192
+```
+#### Entrena el modelo
+```
+val model = trainer.fit(train)
+```
+Ejecución:
+```
+scala> val model = trainer.fit(train)
+val model: org.apache.spark.ml.classification.MultilayerPerceptronClassificationModel = MultilayerPerceptronClassificationModel: uid=mlpc_22e2df4ef192, numLayers=4, numClasses=3, numFeatures=4
+```
+#### Hace las predicciones con el conjunto de prueba
+```
+val result = model.transform(test)
+```
+Ejecución:
+```
+scala> val result = model.transform(test)
+val result: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 8 more fields]
+```
+### 8. Imprime los resultados del modelo y de sus observaciones.
+```
+val predictionAndLabels = result.select("prediction", "label")
+val evaluator = new MulticlassClassificationEvaluator().setMetricName("accuracy")
+println(s"******** Test set accuracy = ${evaluator.evaluate(predictionAndLabels)} ********")
+```
+Ejecución:
+```
+scala> val predictionAndLabels = result.select("prediction", "label")
+val predictionAndLabels: org.apache.spark.sql.DataFrame = [prediction: double, label: double]
 
+scala> val evaluator = new MulticlassClassificationEvaluator().setMetricName("accuracy")
+val evaluator: org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator = MulticlassClassificationEvaluator: uid=mcEval_f6b2884919cb, metricName=accuracy, metricLabel=0.0, beta=1.0, eps=1.0E-15
+
+scala> println(s"******** Test set accuracy = ${evaluator.evaluate(predictionAndLabels)} ********")
+******** Test set accuracy = 0.9803921568627451 ********
+```
+#### Observaciones: El modelo clasificó el 98% de los ejemplos del conjunto de prueba, lo cual lo hace un resultado fiable, a continuación se muestra algunas filas para ver su predicción.
+```
+result.select("features", "label", "prediction").show(10)
+```
+Ejecución:
+```
+scala> result.select("features", "label", "prediction").show(10)
++-----------------+-----+----------+
+|         features|label|prediction|
++-----------------+-----+----------+
+|[4.3,3.0,1.1,0.1]|  0.0|       0.0|
+|[4.4,2.9,1.4,0.2]|  0.0|       0.0|
+|[4.5,2.3,1.3,0.3]|  0.0|       0.0|
+|[4.9,3.1,1.5,0.1]|  0.0|       0.0|
+|[5.0,3.0,1.6,0.2]|  0.0|       0.0|
+|[5.0,3.2,1.2,0.2]|  0.0|       0.0|
+|[5.0,3.3,1.4,0.2]|  0.0|       0.0|
+|[5.0,3.4,1.5,0.2]|  0.0|       0.0|
+|[5.0,3.5,1.3,0.3]|  0.0|       0.0|
+|[5.0,3.6,1.4,0.2]|  0.0|       0.0|
++-----------------+-----+----------+
+only showing top 10 rows
 ```
