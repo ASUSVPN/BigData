@@ -15,22 +15,22 @@
 texto kat
 ```
 # 2. Marco Teórico
-```
- - Regresión logística:
-La regresión logística es una técnica estadística utilizada para analizar la relación entre una variable dependiente categórica (usualmente binaria, como 0 o 1) y un conjunto de variables independientes que pueden ser tanto categóricas como cuantitativas. Su objetivo es modelar la probabilidad de ocurrencia de un evento, en función de las variables predictoras consideradas relevantes para el fenómeno en estudio (Martínez Pérez & Pérez Martín, 2023).
+
+### 2.1 Regresión logística:
+La **regresión logística** es una técnica estadística utilizada para analizar la relación entre una variable dependiente categórica (usualmente binaria, como 0 o 1) y un conjunto de variables independientes que pueden ser tanto categóricas como cuantitativas. Su objetivo es modelar la probabilidad de ocurrencia de un evento, en función de las variables predictoras consideradas relevantes para el fenómeno en estudio (Martínez Pérez & Pérez Martín, 2023).
 
 Este tipo de regresión se basa en el uso de la función logística para estimar la probabilidad de que un caso pertenezca a una determinada categoría. A diferencia de la regresión lineal, donde se predice un valor continuo, en la regresión logística se predice la probabilidad de un resultado binario, como “éxito o fracaso” o “sí o no” (Hilbe, 2015).
 
 La regresión logística es ampliamente utilizada en disciplinas como la medicina, la psicología, la economía y la inteligencia artificial, donde se requiere analizar decisiones categóricas o comportamientos discretos.
 
- - Multilayer perceptron: 
-El Perceptrón Multicapa (Multilayer Perceptron, MLP) es un tipo de red neuronal artificial ampliamente utilizado en el aprendizaje supervisado. Según IBM (2024), el procedimiento MLP permite generar un modelo predictivo para una o más variables dependientes en función de los valores de las variables predictoras, siendo útil tanto en clasificación como en regresión.
+## 2.2 Perceptrón Multicapa:
+El **Perceptrón Multicapa** (Multilayer Perceptron, MLP) es un tipo de red neuronal artificial ampliamente utilizado en el aprendizaje supervisado. Según IBM (2024), el procedimiento MLP permite generar un modelo predictivo para una o más variables dependientes en función de los valores de las variables predictoras, siendo útil tanto en clasificación como en regresión.
 
 Esta arquitectura está compuesta por capas de nodos o neuronas, organizadas en una capa de entrada, una o más capas ocultas y una capa de salida. Cada neurona procesa la información recibida y la transmite a la siguiente capa. Durante el entrenamiento, los pesos de conexión entre las neuronas se ajustan progresivamente con el objetivo de mejorar la precisión del modelo (Nimmada & Basha, 2024).
 
 El algoritmo MLP se caracteriza por su capacidad para aprender a partir de datos etiquetados, lo cual le permite realizar predicciones precisas sobre nuevos datos no vistos. Este tipo de red es particularmente eficaz cuando se requiere modelar relaciones complejas no lineales entre las variables de entrada y salida.
 
-```
+
 
 //Contenido del proyecto
 //1.- Objectivo: Comparación del rendimiento de los siguientes algoritmos de machine learning
