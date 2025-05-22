@@ -30,7 +30,7 @@ Esta arquitectura está compuesta por capas de nodos o neuronas, organizadas en 
 
 El algoritmo MLP se caracteriza por su capacidad para aprender a partir de datos etiquetados, lo cual le permite realizar predicciones precisas sobre nuevos datos no vistos. Este tipo de red es particularmente eficaz cuando se requiere modelar relaciones complejas no lineales entre las variables de entrada y salida.
 
-### 3. Implementación
+# 3. Implementación
 
 Para la implementación de este proyecto se utilizó **Apache Spark** con el lenguaje de programación **Scala**. A continuación, se describen las herramientas empleadas y las razones por las cuales fueron seleccionadas:
 
@@ -56,30 +56,47 @@ Se implementaron y compararon los siguientes algoritmos:
 
 Cada uno fue evaluado usando una división aleatoria del conjunto de datos en entrenamiento (70%) y prueba (30%), repitiendo este proceso 30 veces para obtener métricas más robustas y confiables, como la **accuracy promedio** y la **matriz de confusión**.
 
+# 4. Resultados
 
+|---------|------------|
+| Corrida | Exactitud  |
+|---------|------------|
+|       1 | 0.8824     |
+|       2 | 0.8825     |
+|       3 | 0.8817     |
+|       4 | 0.8793     |
+|       5 | 0.8819     |
+|       6 | 0.8836     |
+|       7 | 0.8804     |
+|       8 | 0.8848     |
+|       9 | 0.8842     |
+|      10 | 0.8823     |
+|      11 | 0.8852     |
+|      12 | 0.8804     |
+|      13 | 0.8840     |
+|      14 | 0.8846     |
+|      15 | 0.8810     |
+|      16 | 0.8839     |
+|      17 | 0.8847     |
+|      18 | 0.8836     |
+|      19 | 0.8775     |
+|      20 | 0.8813     |
+|      21 | 0.8800     |
+|      22 | 0.8842     |
+|      23 | 0.8869     |
+|      24 | 0.8841     |
+|      25 | 0.8836     |
+|      26 | 0.8806     |
+|      27 | 0.8833     |
+|      28 | 0.8878     |
+|      29 | 0.8792     |
+|      30 | 0.8801     |
+val promedio: Double = 0.8826361682159323
 
+Se realizaron 30 corridas independientes del modelo **Multilayer Perceptron Classifier** sobre el conjunto de datos bank-full.csv. En cada corrida se realizó un 70% de entrenamiento y 30% de prueba, con el objetivo de evitar sobreajuste y obtener una evaluación robusta del modelo. La métrica utilizada fue exactitud (accuracy), que indica la proporción de predicciones correctas sobre el total de ejemplos evaluados. El promedio de exactitud tras 30 corridas: 0.8826, el modelo logra una alta exactitud en predecir si un cliente aceptará o no la oferta del banco, basándose en las características del cliente y de su comportamiento bancario.
+# 5. Conclusiones
 
-//Contenido del proyecto
-//1.- Objectivo: Comparación del rendimiento de los siguientes algoritmos de machine learning
-// - Logistic Regresion
-// - Multilayer perceptron
-//Con el siguiente data set: https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
-
-// Contenido del documento de proyecto final
-// 1. Portada
-// 2. Indice
-// 3. Introduccion
-// 4. Marco teorico de los algoritmos
-
-// 5. Implementación (Que herramientas usaron y porque (en este caso spark con scala))
-// 6. Resultados (Un tabular con los datos de 30 corridas por cada algoritmo y hacer un promedio 
-//                para ver su preformance)
-//    y su respectiva explicacion.
-// 7. Conclusiones
-// 8. Referencias (No wikipedia por ningun motivo, traten que sean de articulos cientificos)
-//    El documento debe estar referenciado 
-
-# 8. Referencias
+# 6. Referencias
 ```
 Hilbe, J. M. (2015). Practical Guide to Logistic Regression. PDFDrive. https://ftp.idu.ac.id/wp-content/uploads/ebook/ip/REGRESI%20LOGISTIK/Practical%20Guide%20to%20Logistic%20Regression%20(%20PDFDrive%20).pdf
 
