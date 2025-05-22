@@ -1,76 +1,94 @@
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.sql.SparkSession
-
 import org.apache.log4j._
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.feature.{VectorAssembler, StringIndexer, OneHotEncoder}
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
+import org.apache.spark.sql.functions.col
+
 Logger.getLogger("org").setLevel(Level.ERROR)
 
 val spark = SparkSession.builder().getOrCreate()
 
-val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("bank-full.csv")
+val data = spark.read
+  .option("header", "true")
+  .option("inferSchema", "true")
+  .option("delimiter", ";")
+  .format("csv")
+  .load("bank-full.csv")
 
-data.printSchema()
-
-data.head(1)
-
-val colnames = data.columns
-val firstrow = data.head(1)(0)
-println("\n")
-println("Example data row")
-for(ind <- Range(1, colnames.length)){
-    println(colnames(ind))
-    println(firstrow(ind))
-    println("\n")
-}
-
-val logregdataall = (data.select(data("Survived").as("label"), $"Pclass", $"Name",
-                    $"Sex", $"Age", $"SibSp", $"Parch", $"Fare", $"Embarked"))
+val logregdataall = data.select(
+  $"age", $"job", $"marital", $"education", $"default", $"balance",
+  $"housing", $"loan", $"contact", $"day", $"month", $"duration",
+  $"campaign", $"pdays", $"previous", $"poutcome", $"y".as("label")
+)
 
 val logregdata = logregdataall.na.drop()
 
-import org.apache.spark.ml.feature.{VectorAssembler, StringIndexer, VectorIndexer, OneHotEncoder}
-import org.apache.spark.ml.linalg.Vectors
+// Indexadores para features categóricas
+val jobIndexer        = new StringIndexer().setInputCol("job").setOutputCol("jobIndex")
+val maritalIndexer    = new StringIndexer().setInputCol("marital").setOutputCol("maritalIndex")
+val educationIndexer  = new StringIndexer().setInputCol("education").setOutputCol("educationIndex")
+val defaultIndexer    = new StringIndexer().setInputCol("default").setOutputCol("defaultIndex")
+val housingIndexer    = new StringIndexer().setInputCol("housing").setOutputCol("housingIndex")
+val loanIndexer       = new StringIndexer().setInputCol("loan").setOutputCol("loanIndex")
+val contactIndexer    = new StringIndexer().setInputCol("contact").setOutputCol("contactIndex")
+val monthIndexer      = new StringIndexer().setInputCol("month").setOutputCol("monthIndex")
+val poutcomeIndexer   = new StringIndexer().setInputCol("poutcome").setOutputCol("poutcomeIndex")
 
-// Convertir strings a valores numericos - Transforming string into numerical values
-val genderIndexer = new StringIndexer().setInputCol("Sex").setOutputCol("SexIndex")
-val embarkIndexer = new StringIndexer().setInputCol("Embarked").setOutputCol("EmbarkIndex")
+// Indexador para label
+val labelIndexer      = new StringIndexer().setInputCol("label").setOutputCol("labelIndexed")
 
-// Convertir los valores numericos a One Hot Encoding 0 - 1
-val genderEncoder = new OneHotEncoder().setInputCol("SexIndex").setOutputCol("SexVec")
-val embarkEncoder = new OneHotEncoder().setInputCol("EmbarkIndex").setOutputCol("EmbarkVec")
-// (label, features)
-//val assembler = new VectorAssembler().setInputCol(Array("Pclass", "SexVec", "Age", "SibSp", "Parch", "Fare", "EmbarkedVec")).setOutputCol("features")
-val assembler = (new VectorAssembler()
-                  .setInputCols(Array("Pclass","SexVec", "Age","SibSp","Parch","Fare","EmbarkVec"))
-                  .setOutputCol("features"))
+// OneHotEncoders
+val jobEncoder        = new OneHotEncoder().setInputCol("jobIndex").setOutputCol("jobVec")
+val maritalEncoder    = new OneHotEncoder().setInputCol("maritalIndex").setOutputCol("maritalVec")
+val educationEncoder  = new OneHotEncoder().setInputCol("educationIndex").setOutputCol("educationVec")
+val defaultEncoder    = new OneHotEncoder().setInputCol("defaultIndex").setOutputCol("defaultVec")
+val housingEncoder    = new OneHotEncoder().setInputCol("housingIndex").setOutputCol("housingVec")
+val loanEncoder       = new OneHotEncoder().setInputCol("loanIndex").setOutputCol("loanVec")
+val contactEncoder    = new OneHotEncoder().setInputCol("contactIndex").setOutputCol("contactVec")
+val monthEncoder      = new OneHotEncoder().setInputCol("monthIndex").setOutputCol("monthVec")
+val poutcomeEncoder   = new OneHotEncoder().setInputCol("poutcomeIndex").setOutputCol("poutcomeVec")
 
-val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345)
-
-import org.apache.spark.ml.Pipeline
+// VectorAssembler
+val assembler = new VectorAssembler()
+  .setInputCols(Array(
+    "age", "balance", "day", "duration", "campaign", "pdays", "previous",
+    "jobVec", "maritalVec", "educationVec", "defaultVec", "housingVec",
+    "loanVec", "contactVec", "monthVec", "poutcomeVec"
+  ))
+  .setOutputCol("features")
 
 val lr = new LogisticRegression()
+  .setLabelCol("labelIndexed")
+  .setFeaturesCol("features")
 
-// val pipeline = new Pipeline().setStages(Array(genderIndexer,embarkIndexer,embarkEncoder,assembler,lr))
-val pipeline = new Pipeline().setStages(Array(genderIndexer,embarkIndexer,genderEncoder,embarkEncoder,assembler,lr))
+val pipeline = new Pipeline().setStages(Array(
+  jobIndexer, maritalIndexer, educationIndexer, defaultIndexer, housingIndexer,
+  loanIndexer, contactIndexer, monthIndexer, poutcomeIndexer, labelIndexer,
+  jobEncoder, maritalEncoder, educationEncoder, defaultEncoder, housingEncoder,
+  loanEncoder, contactEncoder, monthEncoder, poutcomeEncoder,
+  assembler, lr
+))
 
-val model = pipeline.fit(training)
+val evaluator = new MulticlassClassificationEvaluator()
+  .setLabelCol("labelIndexed")
+  .setPredictionCol("prediction")
+  .setMetricName("accuracy")
 
-val results = model.transform(test)
+var accuracies = scala.collection.mutable.ArrayBuffer.empty[Double]
 
-results.select("prediction", "label", "features").show(5)
+println(f"Run\tAccuracy")
+for (i <- 1 to 30) {
+  val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = System.currentTimeMillis() + i)
+  val model = pipeline.fit(training)
+  val results = model.transform(test)
 
+  val accuracy = evaluator.evaluate(results)
+  accuracies += accuracy
+  println(f"$i%2d\t$accuracy%.4f")
+}
 
-//Probar el modelo solo se puede con la libreria vieja
-import org.apache.spark.mllib.evaluation.MulticlassMetrics
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
-
-val evaluator = new MulticlassClassificationEvaluator().setLabelCol("label").setPredictionCol("prediction").setMetricName("accuracy")
-val accuracy = evaluator.evaluate(results)
-println(s"Accuracy = ${accuracy}")
-val predictionAndLabels = results.select($"prediction",$"label").as[(Double, Double)].rdd
-val metrics = new MulticlassMetrics(predictionAndLabels)
-
-// Matriz de confusion
-println("Confusion matrix:")
-println(metrics.confusionMatrix)
-
-// metrics.accuracy
+val avgAccuracy = accuracies.sum / accuracies.length
+println(f"\nAverage accuracy after 30 runs: $avgAccuracy%.4f")

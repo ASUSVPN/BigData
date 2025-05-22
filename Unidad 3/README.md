@@ -30,6 +30,33 @@ Esta arquitectura está compuesta por capas de nodos o neuronas, organizadas en 
 
 El algoritmo MLP se caracteriza por su capacidad para aprender a partir de datos etiquetados, lo cual le permite realizar predicciones precisas sobre nuevos datos no vistos. Este tipo de red es particularmente eficaz cuando se requiere modelar relaciones complejas no lineales entre las variables de entrada y salida.
 
+### 3. Implementación
+
+Para la implementación de este proyecto se utilizó **Apache Spark** con el lenguaje de programación **Scala**. A continuación, se describen las herramientas empleadas y las razones por las cuales fueron seleccionadas:
+
+#### Herramientas utilizadas
+
+- **Apache Spark MLlib**: Es una de las bibliotecas más potentes para el desarrollo de algoritmos de machine learning a gran escala. Su capacidad para trabajar con grandes volúmenes de datos en clústeres distribuidos lo hace ideal para aplicaciones del mundo real.
+- **Scala**: Es el lenguaje nativo de Spark. Al usar Scala, se obtiene una mejor integración y rendimiento con el motor de ejecución de Spark. Además, permite escribir código conciso y expresivo para el procesamiento de datos.
+- **Dataset de Marketing Bancario**: El conjunto de datos utilizado fue el "Bank Marketing Dataset" disponible en el repositorio UCI Machine Learning ([enlace al dataset](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)). Este conjunto es ampliamente utilizado para problemas de clasificación binaria, como predecir si un cliente se suscribirá a un producto bancario.
+
+#### Justificación del uso de Spark + Scala
+
+- **Procesamiento distribuido y eficiente**: Spark permite procesar datos de forma distribuida en memoria, lo cual es mucho más rápido que tecnologías tradicionales basadas en disco, especialmente cuando se repiten procesos como entrenamiento de modelos múltiples veces.
+- **Escalabilidad**: Aunque el dataset utilizado no es extremadamente grande, el uso de Spark asegura que el sistema puede escalar a datasets mucho más grandes si se desea.
+- **Facilidad para construir pipelines de ML**: Con Spark MLlib, es sencillo construir pipelines de procesamiento que incluyan etapas como transformación de datos, codificación de variables categóricas, ensamblado de características y entrenamiento del modelo, todo de forma modular.
+- **Automatización de experimentos**: Gracias a las facilidades del lenguaje Scala y las estructuras funcionales de Spark, se pudo automatizar la ejecución de 30 iteraciones por algoritmo, almacenar resultados y calcular estadísticas de rendimiento sin dificultad.
+
+#### Algoritmos implementados
+
+Se implementaron y compararon los siguientes algoritmos:
+
+- Regresión Logística (`LogisticRegression`)
+- Perceptrón multicapa (`MultilayerPerceptronClassifier`)
+
+Cada uno fue evaluado usando una división aleatoria del conjunto de datos en entrenamiento (70%) y prueba (30%), repitiendo este proceso 30 veces para obtener métricas más robustas y confiables, como la **accuracy promedio** y la **matriz de confusión**.
+
+
 
 
 //Contenido del proyecto
