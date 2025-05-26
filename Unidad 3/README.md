@@ -11,13 +11,12 @@
     6. Referencias
 
 # 1. Introducción
-```
 El presente ejercicio se enfoca en predecir si un cliente aceptará o no una oferta bancaria, basándose en un conjunto de variables demográficas, económicas y de comportamiento bancario.
 
 Para ello, se utilizaron algoritmos de aprendizaje supervisado implementados en Apache Spark usando Scala, lo que permitió trabajar de forma eficiente con los datos y automatizar múltiples ejecuciones del modelo. En particular, se emplearon dos técnicas de clasificación: regresión logística y perceptrón multicapa.
 
 El enfoque experimental consistió en ejecutar cada modelo 30 veces. Con ello se buscó garantizar resultados estadísticamente más robustos y comparar el rendimiento promedio de ambos algoritmos. La métrica de evaluación seleccionada fue la exactitud (accuracy), por ser adecuada en contextos donde las clases están balanceadas, como es el caso de este conjunto de datos.
-```
+
 # 2. Marco Teórico
 ### 2.1 Regresión logística:
 La **regresión logística** es una técnica estadística utilizada para analizar la relación entre una variable dependiente categórica (usualmente binaria, como 0 o 1) y un conjunto de variables independientes que pueden ser tanto categóricas como cuantitativas. Su objetivo es modelar la probabilidad de ocurrencia de un evento, en función de las variables predictoras consideradas relevantes para el fenómeno en estudio (Martínez Pérez & Pérez Martín, 2023).
