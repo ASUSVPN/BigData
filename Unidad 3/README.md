@@ -18,7 +18,7 @@ Para ello, se utilizaron algoritmos de aprendizaje supervisado implementados en 
 El enfoque experimental consistió en ejecutar cada modelo 30 veces. Con ello se buscó garantizar resultados estadísticamente más robustos y comparar el rendimiento promedio de ambos algoritmos. La métrica de evaluación seleccionada fue la exactitud (accuracy), por ser adecuada en contextos donde las clases están balanceadas, como es el caso de este conjunto de datos.
 
 # 2. Marco Teórico
-### 2.1 Regresión logística:
+## 2.1 Regresión logística:
 La **regresión logística** es una técnica estadística utilizada para analizar la relación entre una variable dependiente categórica (usualmente binaria, como 0 o 1) y un conjunto de variables independientes que pueden ser tanto categóricas como cuantitativas. Su objetivo es modelar la probabilidad de ocurrencia de un evento, en función de las variables predictoras consideradas relevantes para el fenómeno en estudio (Martínez Pérez & Pérez Martín, 2023).
 
 Este tipo de regresión se basa en el uso de la función logística para estimar la probabilidad de que un caso pertenezca a una determinada categoría. A diferencia de la regresión lineal, donde se predice un valor continuo, en la regresión logística se predice la probabilidad de un resultado binario, como “éxito o fracaso” o “sí o no” (Hilbe, 2015).
@@ -35,19 +35,19 @@ El algoritmo MLP se caracteriza por su capacidad para aprender a partir de datos
 # 3. Implementación
 Para la implementación de este proyecto se utilizó **Apache Spark** con el lenguaje de programación **Scala**. A continuación, se describen las herramientas empleadas y las razones por las cuales fueron seleccionadas:
 
-#### Herramientas utilizadas
+## Herramientas utilizadas
 
 - **Apache Spark MLlib**: Es una de las bibliotecas más potentes para el desarrollo de algoritmos de machine learning a gran escala. Su capacidad para trabajar con grandes volúmenes de datos en clústeres distribuidos lo hace ideal para aplicaciones del mundo real.
 - **Scala**: Es el lenguaje nativo de Spark. Al usar Scala, se obtiene una mejor integración y rendimiento con el motor de ejecución de Spark. Además, permite escribir código conciso y expresivo para el procesamiento de datos.
 - **Dataset de Marketing Bancario**: El conjunto de datos utilizado fue el "Bank Marketing Dataset" disponible en el repositorio UCI Machine Learning ([enlace al dataset](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)). Este conjunto es ampliamente utilizado para problemas de clasificación binaria, como predecir si un cliente se suscribirá a un producto bancario.
 
-#### Justificación del uso de Spark + Scala
+## Justificación del uso de Spark + Scala
 - **Procesamiento distribuido y eficiente**: Spark permite procesar datos de forma distribuida en memoria, lo cual es mucho más rápido que tecnologías tradicionales basadas en disco, especialmente cuando se repiten procesos como entrenamiento de modelos múltiples veces.
 - **Escalabilidad**: Aunque el dataset utilizado no es extremadamente grande, el uso de Spark asegura que el sistema puede escalar a datasets mucho más grandes si se desea.
 - **Facilidad para construir pipelines de ML**: Con Spark MLlib, es sencillo construir pipelines de procesamiento que incluyan etapas como transformación de datos, codificación de variables categóricas, ensamblado de características y entrenamiento del modelo, todo de forma modular.
 - **Automatización de experimentos**: Gracias a las facilidades del lenguaje Scala y las estructuras funcionales de Spark, se pudo automatizar la ejecución de 30 iteraciones por algoritmo, almacenar resultados y calcular estadísticas de rendimiento sin dificultad.
 
-#### Algoritmos implementados
+## Algoritmos implementados
 Se implementaron y compararon los siguientes algoritmos:
 
 - Regresión Logística (`LogisticRegression`)
