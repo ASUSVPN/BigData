@@ -56,7 +56,6 @@ Se implementaron y compararon los siguientes algoritmos:
 Cada uno fue evaluado usando una división aleatoria del conjunto de datos en entrenamiento (70%) y prueba (30%), repitiendo este proceso 30 veces para obtener métricas más robustas y confiables, como la **accuracy promedio** y la **matriz de confusión**.
 
 # 4. Resultados
-|---------|------------|
 | Corrida | Exactitud  |
 |---------|------------|
 |       1 | 0.8824     |
@@ -89,13 +88,12 @@ Cada uno fue evaluado usando una división aleatoria del conjunto de datos en en
 |      28 | 0.8878     |
 |      29 | 0.8792     |
 |      30 | 0.8801     |
-val promedio: Double = 0.8826361682159323
+|Promedio | 0.8826361682159323 |
 
 Se realizaron 30 corridas independientes del modelo **Multilayer Perceptron Classifier** sobre el conjunto de datos bank-full.csv. En cada corrida se realizó un 70% de entrenamiento y 30% de prueba, con el objetivo de evitar sobreajuste y obtener una evaluación robusta del modelo. La métrica utilizada fue exactitud (accuracy), que indica la proporción de predicciones correctas sobre el total de ejemplos evaluados. El promedio de exactitud tras 30 corridas: 0.8826, el modelo logra una alta exactitud en predecir si un cliente aceptará o no la oferta del banco, basándose en las características del cliente y de su comportamiento bancario.
 # 5. Conclusiones
 
 # 6. Referencias
-```
 Hilbe, J. M. (2015). Practical Guide to Logistic Regression. PDFDrive. https://ftp.idu.ac.id/wp-content/uploads/ebook/ip/REGRESI%20LOGISTIK/Practical%20Guide%20to%20Logistic%20Regression%20(%20PDFDrive%20).pdf
 
 IBM. (2024, 30 de septiembre). Perceptrón multicapa. IBM Docs. https://www.ibm.com/docs/es/spss-statistics/saas?topic=networks-multilayer-perceptron
@@ -104,4 +102,3 @@ Martínez Pérez, J. A., & Pérez Martín, P. S. (2023). Regresión logística. 
 
 Nimmada, G., & Basha, S. M. (2024). A novel method for predicting the flight price using multilayer perceptron algorithm compared with support vector machine algorithm. 2024 Ninth International Conference on Science Technology Engineering and Mathematics (ICONSTEM), 1–5. https://doi.org/10.1109/ICONSTEM60960.2024.10568803
 
-```
