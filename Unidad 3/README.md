@@ -26,7 +26,7 @@ Este tipo de regresión se basa en el uso de la función logística para estimar
 La regresión logística es ampliamente utilizada en disciplinas como la medicina, la psicología, la economía y la inteligencia artificial, donde se requiere analizar decisiones categóricas o comportamientos discretos.
 
 ## 2.2 Perceptrón Multicapa:
-El **Perceptrón Multicapa** (Multilayer Perceptron, MLP) es un tipo de red neuronal artificial ampliamente utilizado en el aprendizaje supervisado. Según IBM (2024), el procedimiento MLP permite generar un modelo predictivo para una o más variables dependientes en función de los valores de las variables predictoras, siendo útil tanto en clasificación como en regresión.
+El **perceptrón multicapa** (multilayer perceptron, MLP) es un tipo de red neuronal artificial ampliamente utilizado en el aprendizaje supervisado. Según IBM (2024), el procedimiento MLP permite generar un modelo predictivo para una o más variables dependientes en función de los valores de las variables predictoras, siendo útil tanto en clasificación como en regresión.
 
 Esta arquitectura está compuesta por capas de nodos o neuronas, organizadas en una capa de entrada, una o más capas ocultas y una capa de salida. Cada neurona procesa la información recibida y la transmite a la siguiente capa. Durante el entrenamiento, los pesos de conexión entre las neuronas se ajustan progresivamente con el objetivo de mejorar la precisión del modelo (Nimmada & Basha, 2024).
 
