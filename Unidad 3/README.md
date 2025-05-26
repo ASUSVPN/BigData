@@ -12,10 +12,13 @@
 
 # 1. Introducción
 ```
-texto kat
+El presente ejercicio se enfoca en predecir si un cliente aceptará o no una oferta bancaria, basándose en un conjunto de variables demográficas, económicas y de comportamiento bancario.
+
+Para ello, se utilizaron algoritmos de aprendizaje supervisado implementados en Apache Spark usando Scala, lo que permitió trabajar de forma eficiente con los datos y automatizar múltiples ejecuciones del modelo. En particular, se emplearon dos técnicas de clasificación: regresión logística y perceptrón multicapa.
+
+El enfoque experimental consistió en ejecutar cada modelo 30 veces. Con ello se buscó garantizar resultados estadísticamente más robustos y comparar el rendimiento promedio de ambos algoritmos. La métrica de evaluación seleccionada fue la exactitud (accuracy), por ser adecuada en contextos donde las clases están balanceadas, como es el caso de este conjunto de datos.
 ```
 # 2. Marco Teórico
-
 ### 2.1 Regresión logística:
 La **regresión logística** es una técnica estadística utilizada para analizar la relación entre una variable dependiente categórica (usualmente binaria, como 0 o 1) y un conjunto de variables independientes que pueden ser tanto categóricas como cuantitativas. Su objetivo es modelar la probabilidad de ocurrencia de un evento, en función de las variables predictoras consideradas relevantes para el fenómeno en estudio (Martínez Pérez & Pérez Martín, 2023).
 
@@ -31,7 +34,6 @@ Esta arquitectura está compuesta por capas de nodos o neuronas, organizadas en 
 El algoritmo MLP se caracteriza por su capacidad para aprender a partir de datos etiquetados, lo cual le permite realizar predicciones precisas sobre nuevos datos no vistos. Este tipo de red es particularmente eficaz cuando se requiere modelar relaciones complejas no lineales entre las variables de entrada y salida.
 
 # 3. Implementación
-
 Para la implementación de este proyecto se utilizó **Apache Spark** con el lenguaje de programación **Scala**. A continuación, se describen las herramientas empleadas y las razones por las cuales fueron seleccionadas:
 
 #### Herramientas utilizadas
@@ -41,14 +43,12 @@ Para la implementación de este proyecto se utilizó **Apache Spark** con el len
 - **Dataset de Marketing Bancario**: El conjunto de datos utilizado fue el "Bank Marketing Dataset" disponible en el repositorio UCI Machine Learning ([enlace al dataset](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)). Este conjunto es ampliamente utilizado para problemas de clasificación binaria, como predecir si un cliente se suscribirá a un producto bancario.
 
 #### Justificación del uso de Spark + Scala
-
 - **Procesamiento distribuido y eficiente**: Spark permite procesar datos de forma distribuida en memoria, lo cual es mucho más rápido que tecnologías tradicionales basadas en disco, especialmente cuando se repiten procesos como entrenamiento de modelos múltiples veces.
 - **Escalabilidad**: Aunque el dataset utilizado no es extremadamente grande, el uso de Spark asegura que el sistema puede escalar a datasets mucho más grandes si se desea.
 - **Facilidad para construir pipelines de ML**: Con Spark MLlib, es sencillo construir pipelines de procesamiento que incluyan etapas como transformación de datos, codificación de variables categóricas, ensamblado de características y entrenamiento del modelo, todo de forma modular.
 - **Automatización de experimentos**: Gracias a las facilidades del lenguaje Scala y las estructuras funcionales de Spark, se pudo automatizar la ejecución de 30 iteraciones por algoritmo, almacenar resultados y calcular estadísticas de rendimiento sin dificultad.
 
 #### Algoritmos implementados
-
 Se implementaron y compararon los siguientes algoritmos:
 
 - Regresión Logística (`LogisticRegression`)
@@ -57,7 +57,6 @@ Se implementaron y compararon los siguientes algoritmos:
 Cada uno fue evaluado usando una división aleatoria del conjunto de datos en entrenamiento (70%) y prueba (30%), repitiendo este proceso 30 veces para obtener métricas más robustas y confiables, como la **accuracy promedio** y la **matriz de confusión**.
 
 # 4. Resultados
-
 |---------|------------|
 | Corrida | Exactitud  |
 |---------|------------|
