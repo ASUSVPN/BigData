@@ -2,7 +2,7 @@
 // Katherynne Plessmann
 // Salomon Cruz Vidal
 
-// 1. Cargar en un dataframe de la fuente de datos Iris.csv 
+// 1. Cargar en un dataframe de la fuente de datos bank-full.csv 
 // Importar librerias
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
