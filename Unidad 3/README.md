@@ -1,4 +1,5 @@
 # UNIVERSIDAD AUTÓNOMA DE BAJA CALIFORNIA  
+![LOGO DE UABC](https://github.com/ASUSVPN/BigData/blob/unidad3/Unidad%203/UABC.png?raw=true)
 ## Facultad de Contaduria y Administracion 
 ### Maestría en Gestión de Tecnologías de la Información y la Comunicación
 
