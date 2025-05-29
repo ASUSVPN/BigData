@@ -28,12 +28,12 @@ data.show(5)
 // 5. Usa el método describe () para aprender más sobre los datos del DataFrame.
 data.describe().show()
 
-// 6. Haga la transformación pertinente para los datos categóricos los cuales serán nuestras etiquetas a clasificar.
-//Convertir la etiqueta "y" a "label"
+// 6. Hace la transformación pertinente para los datos categóricos los cuales serán nuestras etiquetas a clasificar.
+//Convierte la etiqueta "y" a "label"
 val labelIndexer = new StringIndexer().setInputCol("y").setOutputCol("label").fit(data)
 val withLabel = labelIndexer.transform(data)
 
-// Convertir las columnas categóricas seleccionadas a numéricas
+// Convierte las columnas categóricas seleccionadas a numéricas
 val jobIndexer = new StringIndexer().setInputCol("job").setOutputCol("jobIndex").fit(withLabel)
 val maritalIndexer = new StringIndexer().setInputCol("marital").setOutputCol("maritalIndex").fit(withLabel)
 val educationIndexer = new StringIndexer().setInputCol("education").setOutputCol("educationIndex").fit(withLabel)
@@ -41,11 +41,11 @@ val defaultIndexer = new StringIndexer().setInputCol("default").setOutputCol("de
 val housingIndexer = new StringIndexer().setInputCol("housing").setOutputCol("housingIndex").fit(withLabel)
 val loanIndexer = new StringIndexer().setInputCol("loan").setOutputCol("loanIndex").fit(withLabel)
 
-// Aplicar los indexadores en cadena
+// Aplicaa los indexadores en cadena
 val dataIndexed = loanIndexer.transform(housingIndexer.transform(defaultIndexer.transform(educationIndexer.transform(maritalIndexer.transform(jobIndexer.transform(withLabel))))))
 dataIndexed.printSchema()
 
-// 7. Construya el modelo de clasificación y explique su arquitectura.
+// 7. Construye el modelo de clasificación y explique su arquitectura.
 // Crea la columna features combinando columnas numéricas
 val assembler = new VectorAssembler().setInputCols(Array("age", "balance", "duration", "campaign", "jobIndex", "maritalIndex", "educationIndex", "defaultIndex", "housingIndex", "loanIndex")).setOutputCol("features")
 
@@ -53,7 +53,7 @@ val finalData = assembler.transform(dataIndexed)
 // Divide los datos en entrenamiento (70%) y prueba (30%)
 val Array(train, test) = finalData.randomSplit(Array(0.7, 0.3), seed = 1234L)
 
-// Definie la arquitectura de la red neuronal
+// Define la arquitectura de la red neuronal
 val layers = Array[Int](10, 8, 4, 2) 
 
 // Configura el modelo
@@ -70,7 +70,7 @@ val resultados = ListBuffer[(Int, Double)]()
 for (i <- 1 to 30) {
   println(s"Ejecutando recorrido: $i")
 
-  val Array(train, test) = finalData.randomSplit(Array(0.7, 0.3), seed = System.nanoTime())
+  val Array(train, test) = finalData.randomSplit(Array(0.7, 0.3), seed = System.nanoTime()+i)
 
   val model = trainer.fit(train)
   val result = model.transform(test)
