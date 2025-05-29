@@ -2,8 +2,8 @@
 // Katherynne Plessmann
 // Salomon Cruz Vidal
 
-// 1. Cargar en un dataframe de la fuente de datos bank-full.csv 
-// Importar librerias
+// 1. Carga en un dataframe de la fuente de datos bank-full.csv 
+// Importa librerias
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.sql.SparkSession

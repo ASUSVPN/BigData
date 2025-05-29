@@ -21,21 +21,21 @@
 
 
 # Índice
-    1. Introducción
-    2. Marco teórico
-    3. Implementación
-    4. Resultados
-    5. Conclusiones
-    6. Referencias
+1. [Introducción](#id1)
+2. [Marco teórico](#id2)
+3. [Implementación](#id3)
+4. [Resultados](#id4)
+5. [Conclusiones](#id5)
+6. [Referencias](#id6)
 
-# 1. Introducción
+# 1. Introducción <a name="id1"></a>
 El presente ejercicio se enfoca en predecir si un cliente aceptará o no una oferta bancaria, basándose en un conjunto de variables demográficas, económicas y de comportamiento bancario que fueron provistas de un dataset.
 
 Para ello, se utilizaron algoritmos de aprendizaje supervisado implementados en Apache Spark usando Scala, lo que permitió trabajar de forma eficiente con los datos y automatizar múltiples ejecuciones del modelo. En particular, se emplearon dos técnicas de clasificación: regresión logística y perceptrón multicapa.
 
 El enfoque experimental consistió en ejecutar cada modelo 30 veces. Con ello se buscó garantizar resultados estadísticamente más robustos y comparar el rendimiento promedio de ambos algoritmos. La métrica de evaluación seleccionada fue la exactitud (accuracy), por ser adecuada en contextos donde las clases están balanceadas, como es el caso de este conjunto de datos.
 
-# 2. Marco Teórico
+# 2. Marco Teórico <a name="id2"></a>
 ## 2.1 Regresión logística:
 La **regresión logística** es una técnica estadística utilizada para analizar la relación entre una variable dependiente categórica (usualmente binaria, como 0 o 1) y un conjunto de variables independientes que pueden ser tanto categóricas como cuantitativas. Su objetivo es modelar la probabilidad de ocurrencia de un evento, en función de las variables predictoras consideradas relevantes para el fenómeno en estudio (Martínez Pérez & Pérez Martín, 2023).
 
@@ -50,7 +50,7 @@ Esta arquitectura está compuesta por capas de nodos o neuronas, organizadas en 
 
 El algoritmo MLP se caracteriza por su capacidad para aprender a partir de datos etiquetados, lo cual le permite realizar predicciones precisas sobre nuevos datos no vistos. Este tipo de red es particularmente eficaz cuando se requiere modelar relaciones complejas no lineales entre las variables de entrada y salida.
 
-# 3. Implementación
+# 3. Implementación <a name="id3"></a>
 Para la implementación de este proyecto se utilizó **Apache Spark** con el lenguaje de programación **Scala** y el editor de Codigo **Visual Studio Code**. A continuación, se describen las herramientas empleadas y las razones por las cuales fueron seleccionadas:
 
 ## Herramientas utilizadas
@@ -73,7 +73,7 @@ Se implementaron y compararon los siguientes algoritmos:
 
 Cada uno fue evaluado usando una división aleatoria del conjunto de datos en entrenamiento (70%) y prueba (30%), repitiendo este proceso 30 veces para obtener métricas más robustas y confiables, como la **accuracy promedio** y la **matriz de confusión**.
 
-# 4. Resultados
+# 4. Resultados <a name="id4"></a>
 
 **Logistic Regresion**
 | Run | Accuracy |
@@ -151,7 +151,7 @@ Se corrieron 30 veces el modelo de **regresión logística** con el dataset bank
 
 Se realizaron 30 corridas independientes del modelo **Multilayer Perceptron Classifier** sobre el conjunto de datos bank-full.csv. En cada corrida se realizó un 70% de entrenamiento y 30% de prueba, con el objetivo de evitar sobreajuste y obtener una evaluación robusta del modelo. La métrica utilizada fue exactitud (accuracy), que indica la proporción de predicciones correctas sobre el total de ejemplos evaluados. El promedio de exactitud tras 30 corridas: 0.8826, el modelo logra una alta exactitud en predecir si un cliente aceptará o no la oferta del banco, basándose en las características del cliente y de su comportamiento bancario.
 
-# 5. Conclusiones
+# 5. Conclusiones <a name="id5"></a>
 
 En este trabajo pudimos ver que tanto la regresión logística como el perceptrón multicapa son modelos útiles para predecir si un cliente aceptará una oferta bancaria, usando las variables del dataset.
 
@@ -166,7 +166,7 @@ Finalmente, el uso de Apache Spark y Scala fue fundamental para manejar los dato
 En resumen, para este caso específico, la regresión logística es la mejor opción, pero el perceptrón multicapa sigue siendo una alternativa válida si se desea explorar modelos más complejos.
 
 
-# 6. Referencias
+# 6. Referencias <a name="id6"></a>
 ## Referencias
 
 Hilbe, J. M. (2015). *Practical Guide to Logistic Regression*. PDFDrive. https://ftp.idu.ac.id/wp-content/uploads/ebook/ip/REGRESI%20LOGISTIK/Practical%20Guide%20to%20Logistic%20Regression%20(%20PDFDrive%20).pdf
