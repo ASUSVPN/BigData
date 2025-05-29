@@ -22,6 +22,15 @@ val spark = SparkSession.builder().getOrCreate()
 //Cargamos la data de bank-full.csv en un dataframe
 val data = spark.read.option("header", "true").option("inferSchema", "true").option("delimiter", ";").format("csv").load("bank-full.csv")
 
+// 2 Vemos los nombres de las columnas
+data.columns
+
+// Vemos como es el esquema
+data.printSchema()
+
+// Imprimimos 5 renglones
+data.show(5)
+
 import spark.implicits._ 
 //seleccionamos las columnas y renombramos la columba objetivo
 val logregdataall = data.select($"age", $"job", $"marital", $"education", $"default", $"balance",$"housing", $"loan", $"contact", $"day", $"month", $"duration",$"campaign", $"pdays", $"previous", $"poutcome", $"y".as("label"))
